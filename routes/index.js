@@ -14,4 +14,9 @@ router.get('/', (req, res) => {
 
 router.use('/', loginRouter)
 
+router.get('/home', Controller.productFindAll);
+router.post('/:id/add-chart', Controller.addChart);
+router.get('/orderlist', Controller.orderListFindAll);
+router.get('/orderlist', Controller.orderListFindAll);
+
 module.exports = router;
