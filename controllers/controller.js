@@ -14,6 +14,7 @@ class Controller {
     }
 
     static addChart(req, res) {
+        console.log(">>>>>>>>", req.body);
         Product.decrement('stock', {
             by : req.body.purchased,
             where: {
@@ -39,13 +40,13 @@ class Controller {
     }
 
     static orderListFindAll(req, res){
-        // console.log("req.body.UserId_orderlist ", req.body.UserId_orderlist );
+        // console.log("req.body.UserId_orderlist ", req.body );
         Order.findAll({
-            where : {
-                UserId : 1 //WILL BE CHANGED WITH SESSION VALUE
-            },
-            include : [Product]
-        })
+            attributes: [
+                'id', 'UserId', 'ProductId', 'qty', 'totalPrice', 'createdAt', 'updatedAt'
+             ],
+             include : [Product]
+          })
         .then(data => {
             // res.send(data)
             res.render('orderlist', {DataOrder : data})
@@ -57,39 +58,45 @@ class Controller {
 
     static deleteOrder(req, res) {
         console.log('increment qty : ', req.body);
-        Order.destroy({
+        let OrderId = 0;
+        Order.findAll({
             where : {
-                ProductId :  req.params.id
-            }
+                id : req.params.id
+            },
+            include : [Product]
         })
-        .then(() => {
-            Product.increment('stock', {
-                by : 10,        //should be increment by qty
-                where : {
-                    id: req.params.id
-                },
+        .then(dataOrder => {
+            // res.send(dataOrder)
+            return Product.update({
+                stock : dataOrder[0].qty + dataOrder[0].Product.stock,
+            }, 
+            {   where : {
+                    id : dataOrder[0].Product.id
+                }
             })
-            // res.redirect("/orderlist")
         })
-        .then((data) => {
+        .then(dataProductUpdate => {
+            return Order.destroy({
+                where : {
+                    id : req.params.id
+                }
+            })
+        })
+        .then(()=> {
             res.redirect("/orderlist")
         })
         .catch(err => {
-            res.send(err);
+            res.send(err)
         })
     }
 
     static checkout(req, res) {
         // res.send("checkout");
-        Order.findAll({
-            where : {
-                UserId: 1 //based on session
-            }
-        })
+        Order.findAll()
         .then(data => {
             res.send(data);
         })
-        .catch(err => {
+        .catch(err => { 
             res.send(err)
         })
     }

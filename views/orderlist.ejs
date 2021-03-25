@@ -17,13 +17,16 @@
             <th>Action</th>
         </tr>
         <% for(let i = 0; i < DataOrder.length; i++) { %>
-        <form action="orderlist/<%= DataOrder[i].ProductId%>/delete" method="POST">
+        <form action="/<%= DataOrder[i].id%>/delete-order" method="POST">
         <tr>
             <td><%= DataOrder[i].Product.prooductName %></td>
             <td><%= DataOrder[i].Product.price %></td>
             <td><input type="number" name="qty" value="<%= DataOrder[i].qty %>"></td>
             <td><%=  %></td>
-            <td><a href="orderlist/<%= DataOrder[i].ProductId%>/delete">Delete</a></td>
+            <td>
+                <a href="/<%= DataOrder[i].id%>/delete-order">Delete</a>
+                <a href="/<%= DataOrder[i].id%>/delete">Edit</a>
+            </td>
         </tr>
         </form>
         <% } %>
