@@ -1,5 +1,6 @@
 const {Order, Product, User} = require('../models');
 class Controller {
+
     static productFindAll(req, res){
         Product.findAll({
             order: [['id', 'DESC']]
@@ -53,6 +54,7 @@ class Controller {
             res.send(err);
         })
     }
+
 }
 
 module.exports = Controller;
