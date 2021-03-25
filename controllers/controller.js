@@ -38,7 +38,7 @@ class Controller {
     }
 
     static orderListFindAll(req, res){
-        console.log("req.body.UserId_orderlist ", req.body.UserId_orderlist );
+        // console.log("req.body.UserId_orderlist ", req.body.UserId_orderlist );
         Order.findAll({
             where : {
                 UserId : 1 //WILL BE CHANGED WITH SESSION VALUE
@@ -51,6 +51,45 @@ class Controller {
         })
         .catch(err => {
             res.send(err);
+        })
+    }
+
+    static deleteOrder(req, res) {
+        console.log('increment qty : ', req.body);
+        Order.destroy({
+            where : {
+                ProductId :  req.params.id
+            }
+        })
+        .then(() => {
+            Product.increment('stock', {
+                by : 10,        //should be increment by qty
+                where : {
+                    id: req.params.id
+                },
+            })
+            // res.redirect("/orderlist")
+        })
+        .then((data) => {
+            res.redirect("/orderlist")
+        })
+        .catch(err => {
+            res.send(err);
+        })
+    }
+
+    static checkout(req, res) {
+        // res.send("checkout");
+        Order.findAll({
+            where : {
+                UserId: 1 //based on session
+            }
+        })
+        .then(data => {
+            res.send(data);
+        })
+        .catch(err => {
+            res.send(err)
         })
     }
 }

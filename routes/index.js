@@ -10,6 +10,7 @@ router.get('/', (req, res) => {
 router.get('/home', Controller.productFindAll);
 router.post('/:id/add-chart', Controller.addChart);
 router.get('/orderlist', Controller.orderListFindAll);
-router.get('/orderlist', Controller.orderListFindAll);
+router.get('/orderlist/:id/delete', Controller.deleteOrder);
+router.get('/checkout', Controller.checkout);
 
 module.exports = router;

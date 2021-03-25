@@ -7,6 +7,7 @@
     <title>Document</title>
 </head>
 <body>
+    <%= JSON.stringify(DataOrder)%>
     <table border = 1>
         <tr>
             <th>Product Name</th>
@@ -16,14 +17,17 @@
             <th>Action</th>
         </tr>
         <% for(let i = 0; i < DataOrder.length; i++) { %>
+        <form action="orderlist/<%= DataOrder[i].ProductId%>/delete" method="POST">
         <tr>
             <td><%= DataOrder[i].Product.prooductName %></td>
             <td><%= DataOrder[i].Product.price %></td>
             <td><input type="number" name="qty" value="<%= DataOrder[i].qty %>"></td>
             <td><%=  %></td>
-            <td><a href="">Delete</a></td>
+            <td><a href="orderlist/<%= DataOrder[i].ProductId%>/delete">Delete</a></td>
         </tr>
+        </form>
         <% } %>
     </table>
+    <a href="/checkout">Download invoice</a>
 </body>
 </html>
