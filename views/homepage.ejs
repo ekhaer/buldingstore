@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homepage</title>
+</head>
+<body>
+    <!-- <%= JSON.stringify(dataProducts)%> -->
+    <form action="/orderlist" method="POST">
+    <label>User id : </label>
+    <input type="number" name="UserId_orderlist">
+    <a href="/orderlist">Order List</a>
+    </form>
+
+    <table border = 1>
+        <tr>
+            <th>Product Name</th>
+            <th>Price</th>
+            <th>Stock</th>
+            <th>Purchase</th>
+            <th>userId (delete soon)</th>
+            <th>Action</th>
+        </tr>
+        <% for(let i = 0; i < dataProducts.length; i++) { %>
+            <form action="/<%= dataProducts[i].id%>/add-chart" method="POST">
+                <tr>
+                    <td><%= dataProducts[i].prooductName %></td>
+                    <td><%= dataProducts[i].price %></td>
+                    <td><%= dataProducts[i].stock %></td>
+                    <td> <input type="number" name="purchased"></td>
+                    <td><input type="number" name="UserId"></td>
+                    <td> <input type="submit" value="Add to chart"></td>
+                </tr>
+            </form>
+        <% } %>
+    </table>
+</body>
+</html>
