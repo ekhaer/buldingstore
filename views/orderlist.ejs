@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
     <title>Document</title>
 </head>
 <body>
@@ -19,13 +20,16 @@
             <th>Action</th>
         </tr>
         <% for(let i = 0; i < DataOrder.length; i++) { %>
-        <form action="orderlist/<%= DataOrder[i].ProductId%>/delete" method="POST">
+        <form action="/<%= DataOrder[i].id%>/delete-order" method="POST">
         <tr>
             <td><%= DataOrder[i].Product.prooductName %></td>
             <td><%= DataOrder[i].Product.price %></td>
-            <td><input type="number" name="qty" value="<%= DataOrder[i].qty %>"></td>
-            <td><%=  %></td>
-            <td><a href="orderlist/<%= DataOrder[i].ProductId%>/delete">Delete</a></td>
+            <td><%= DataOrder[i].qty %></td>
+            <td><%= getTotalPrice(DataOrder[i].qty, DataOrder[i].Product.price) %></td>
+            <td>
+                <a href="/<%= DataOrder[i].id%>/delete-order">Delete</a>
+                <a href="/<%= DataOrder[i].id%>/edit-order">Edit</a>
+            </td>
         </tr>
         </form>
         <% } %>

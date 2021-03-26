@@ -1,4 +1,5 @@
 const {Order, Product, User} = require('../models');
+const getTotalPrice = require('../helper/getTotalPrice');
 class Controller {
 
     static productFindAll(req, res){
@@ -41,16 +42,19 @@ class Controller {
     }
 
     static orderListFindAll(req, res){
-        
+        // console.log("req.body.UserId_orderlist ", req.body );
         Order.findAll({
-            where : {
+            attributes: [
+                'id', 'UserId', 'ProductId', 'qty', 'totalPrice', 'createdAt', 'updatedAt'
+             ],
+             where : {
                 UserId : req.session.dataLogin.userId //WILL BE CHANGED WITH SESSION VALUE
             },
-            include : [Product]
-        })
+             include : [Product]
+          })
         .then(data => {
             // res.send(data)
-            res.render('orderlist', {DataOrder : data})
+            res.render('orderlist', {DataOrder : data, getTotalPrice})
         })
         .catch(err => {
             res.send(err);
@@ -59,30 +63,40 @@ class Controller {
 
     static deleteOrder(req, res) {
         console.log('increment qty : ', req.body);
-        Order.destroy({
+        let OrderId = 0;
+        Order.findAll({
             where : {
-                ProductId :  req.params.id
-            }
+                id : req.params.id
+            },
+            include : [Product]
         })
-        .then(() => {
-            Product.increment('stock', {
-                by : 10,        //should be increment by qty
-                where : {
-                    id: req.params.id
-                },
+        .then(dataOrder => {
+            // res.send(dataOrder)
+            return Product.update({
+                stock : dataOrder[0].qty + dataOrder[0].Product.stock,
+            }, 
+            {   where : {
+                    id : dataOrder[0].Product.id
+                }
             })
-            // res.redirect("/orderlist")
         })
-        .then((data) => {
+        .then(dataProductUpdate => {
+            return Order.destroy({
+                where : {
+                    id : req.params.id
+                }
+            })
+        })
+        .then(()=> {
             res.redirect("/orderlist")
         })
         .catch(err => {
-            res.send(err);
+            res.send(err)
         })
     }
 
     static checkout(req, res) {
-        
+        // res.send("checkout");
         Order.findAll({
             where : {
                 UserId: req.session.dataLogin.userId //based on session
@@ -90,6 +104,42 @@ class Controller {
         })
         .then(data => {
             res.send(data);
+        })
+        .catch(err => { 
+            res.send(err)
+        })
+    }
+
+    static getEditOrder(req, res){
+        console.log(req.params.id)
+        Order.findOne({
+            where : {
+                id : req.params.id
+            },
+            attributes: [
+                'id', 'UserId', 'ProductId', 'qty', 'totalPrice', 'createdAt', 'updatedAt'
+             ],
+             include : [Product]
+        })
+        .then(data => {
+            // res.send(data)
+            res.render('editOrder', {dataOrder : data, getTotalPrice})
+        })
+        .catch(err => {
+            res.send(err)
+        })
+    }
+
+    static postEditOrder(req, res){
+        // res.send(req.body)
+        Order.update({
+            qty : req.body.qty},{
+            where : {
+                id : req.params.id
+            }
+        })
+        .then(()=> {
+            res.redirect('/orderlist');
         })
         .catch(err => {
             res.send(err)
