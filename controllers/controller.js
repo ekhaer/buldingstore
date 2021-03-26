@@ -2,6 +2,7 @@ const {Order, Product, User} = require('../models');
 class Controller {
 
     static productFindAll(req, res){
+        
         Product.findAll({
             order: [['id', 'DESC']]
         })
@@ -14,6 +15,7 @@ class Controller {
     }
 
     static addChart(req, res) {
+        
         Product.decrement('stock', {
             by : req.body.purchased,
             where: {
@@ -24,7 +26,7 @@ class Controller {
             console.log("user id : ", req.params.id);
             console.log("id product : ", req.body.purchased);
             return Order.create({
-                UserId : req.body.UserId,   //WILL BE CHANGED WITH SESSION VALUE
+                UserId : req.session.dataLogin.userId,   //WILL BE CHANGED WITH SESSION VALUE
                 ProductId : req.params.id,
                 qty : req.body.purchased
             })
@@ -39,10 +41,10 @@ class Controller {
     }
 
     static orderListFindAll(req, res){
-        // console.log("req.body.UserId_orderlist ", req.body.UserId_orderlist );
+        
         Order.findAll({
             where : {
-                UserId : 1 //WILL BE CHANGED WITH SESSION VALUE
+                UserId : req.session.dataLogin.userId //WILL BE CHANGED WITH SESSION VALUE
             },
             include : [Product]
         })
@@ -80,10 +82,10 @@ class Controller {
     }
 
     static checkout(req, res) {
-        // res.send("checkout");
+        
         Order.findAll({
             where : {
-                UserId: 1 //based on session
+                UserId: req.session.dataLogin.userId //based on session
             }
         })
         .then(data => {

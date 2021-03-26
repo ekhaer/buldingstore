@@ -12,6 +12,7 @@
     <label>User id : </label>
     <input type="number" name="UserId_orderlist">
     <a href="/orderlist">Order List</a>
+    <a href="/logout">Logout</a>
     </form>
 
     <table border = 1>
@@ -20,7 +21,6 @@
             <th>Price</th>
             <th>Stock</th>
             <th>Purchase</th>
-            <th>userId (delete soon)</th>
             <th>Action</th>
         </tr>
         <% for(let i = 0; i < dataProducts.length; i++) { %>
@@ -30,7 +30,6 @@
                     <td><%= dataProducts[i].price %></td>
                     <td><%= dataProducts[i].stock %></td>
                     <td> <input type="number" name="purchased"></td>
-                    <td><input type="number" name="UserId"></td>
                     <td> <input type="submit" value="Add to chart"></td>
                 </tr>
             </form>
