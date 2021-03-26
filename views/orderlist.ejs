@@ -7,7 +7,7 @@
     <title>Document</title>
 </head>
 <body>
-    <%= JSON.stringify(DataOrder)%>
+    <!-- <%= JSON.stringify(DataOrder)%> -->
     <table border = 1>
         <tr>
             <th>Product Name</th>
@@ -21,11 +21,11 @@
         <tr>
             <td><%= DataOrder[i].Product.prooductName %></td>
             <td><%= DataOrder[i].Product.price %></td>
-            <td><input type="number" name="qty" value="<%= DataOrder[i].qty %>"></td>
-            <td><%=  %></td>
+            <td><%= DataOrder[i].qty %></td>
+            <td><%= getTotalPrice(DataOrder[i].qty, DataOrder[i].Product.price) %></td>
             <td>
                 <a href="/<%= DataOrder[i].id%>/delete-order">Delete</a>
-                <a href="/<%= DataOrder[i].id%>/delete">Edit</a>
+                <a href="/<%= DataOrder[i].id%>/edit-order">Edit</a>
             </td>
         </tr>
         </form>

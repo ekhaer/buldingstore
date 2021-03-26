@@ -18,6 +18,8 @@ router.get('/home', Controller.productFindAll);
 router.post('/:id/add-chart', Controller.addChart);
 router.get('/orderlist', Controller.orderListFindAll);
 router.get('/:id/delete-order', Controller.deleteOrder);
+router.get('/:id/edit-order', Controller.getEditOrder);
+router.post('/:id/edit-order', Controller.postEditOrder);
 router.get('/checkout', Controller.checkout);
 
 module.exports = router;

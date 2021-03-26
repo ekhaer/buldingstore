@@ -1,4 +1,5 @@
 const {Order, Product, User} = require('../models');
+const getTotalPrice = require('../helper/getTotalPrice');
 class Controller {
 
     static productFindAll(req, res){
@@ -49,7 +50,7 @@ class Controller {
           })
         .then(data => {
             // res.send(data)
-            res.render('orderlist', {DataOrder : data})
+            res.render('orderlist', {DataOrder : data, getTotalPrice})
         })
         .catch(err => {
             res.send(err);
@@ -97,6 +98,42 @@ class Controller {
             res.send(data);
         })
         .catch(err => { 
+            res.send(err)
+        })
+    }
+
+    static getEditOrder(req, res){
+        console.log(req.params.id)
+        Order.findOne({
+            where : {
+                id : req.params.id
+            },
+            attributes: [
+                'id', 'UserId', 'ProductId', 'qty', 'totalPrice', 'createdAt', 'updatedAt'
+             ],
+             include : [Product]
+        })
+        .then(data => {
+            // res.send(data)
+            res.render('editOrder', {dataOrder : data, getTotalPrice})
+        })
+        .catch(err => {
+            res.send(err)
+        })
+    }
+
+    static postEditOrder(req, res){
+        // res.send(req.body)
+        Order.update({
+            qty : req.body.qty},{
+            where : {
+                id : req.params.id
+            }
+        })
+        .then(()=> {
+            res.redirect('/orderlist');
+        })
+        .catch(err => {
             res.send(err)
         })
     }

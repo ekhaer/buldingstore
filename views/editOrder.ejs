@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form action="/<%= dataOrder.id%>/edit-order" method="POST">
+    <div>
+        <label>Product Name</label>
+        <input type="text" name="name" value="<%= dataOrder.Product.prooductName %>" disabled>
+    </div>
+    <div>
+        <label>Price</label>
+        <input type="text" name="price" value="<%= dataOrder.Product.price %>" disabled>
+    </div>
+    <div>
+        <label>Quantity</label>
+        <input type="text" name="qty" value="<%= dataOrder.qty %>">
+    </div>
+    <!-- <div>
+        <label>Total</label>
+        <input type="text" name="total" value="<%= getTotalPrice(dataOrder.qty, dataOrder.Product.price)  %>" disabled>
+    </div> -->
+    <div>
+        <input type="submit" value="edit">
+    </div>
+    </form>
+</body>
+</html>
