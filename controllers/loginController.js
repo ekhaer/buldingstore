@@ -1,12 +1,34 @@
+const { User } = require('../models')
+
 class LoginController {
     static getLogin(req, res) {
-        // console.log('<<< ini masuk get login controller');
+        
         res.render('loginPage')
     }
 
     static postLogin(req, res) {
+        
         req.session.isLogin = true
-        res.redirect('/home')
+        
+        User.findAll()
+            .then(data => {
+                
+                let result
+                data.forEach(el => {
+                    
+                    if (el.username === req.body.username && el.password === req.body.password) {
+                        result = el
+                    }
+                });
+                
+                req.session.dataLogin = { userId : result.id, username: result.username }
+                // res.send(result)
+                res.redirect('/home')
+            })
+            .catch(err => {
+                console.log(err);
+            })
+        
     }
 
     static getLogout(req, res) {

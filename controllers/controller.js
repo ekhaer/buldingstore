@@ -3,6 +3,7 @@ const getTotalPrice = require('../helper/getTotalPrice');
 class Controller {
 
     static productFindAll(req, res){
+        
         Product.findAll({
             order: [['id', 'DESC']]
         })
@@ -15,7 +16,7 @@ class Controller {
     }
 
     static addChart(req, res) {
-        console.log(">>>>>>>>", req.body);
+        
         Product.decrement('stock', {
             by : req.body.purchased,
             where: {
@@ -26,7 +27,7 @@ class Controller {
             console.log("user id : ", req.params.id);
             console.log("id product : ", req.body.purchased);
             return Order.create({
-                UserId : req.body.UserId,   //WILL BE CHANGED WITH SESSION VALUE
+                UserId : req.session.dataLogin.userId,   //WILL BE CHANGED WITH SESSION VALUE
                 ProductId : req.params.id,
                 qty : req.body.purchased
             })
@@ -46,6 +47,9 @@ class Controller {
             attributes: [
                 'id', 'UserId', 'ProductId', 'qty', 'totalPrice', 'createdAt', 'updatedAt'
              ],
+             where : {
+                UserId : req.session.dataLogin.userId //WILL BE CHANGED WITH SESSION VALUE
+            },
              include : [Product]
           })
         .then(data => {
@@ -93,7 +97,11 @@ class Controller {
 
     static checkout(req, res) {
         // res.send("checkout");
-        Order.findAll()
+        Order.findAll({
+            where : {
+                UserId: req.session.dataLogin.userId //based on session
+            }
+        })
         .then(data => {
             res.send(data);
         })
